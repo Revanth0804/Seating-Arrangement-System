@@ -59,14 +59,15 @@ const Section = styled.div`
     cursor: pointer;
     margin-top: 10px;
     transition: background-color 0.3s, transform 0.2s ease;
-    
+
     &:hover {
       background-color: #0056b3;
       transform: scale(1.05);
     }
   }
 
-  input, textarea {
+  input,
+  textarea {
     width: 100%;
     margin: 10px 0;
     padding: 12px;
@@ -102,54 +103,81 @@ const WeatherWidget = styled.div`
   }
 `;
 
+const SuccessMessage = styled.span`
+  display: block;
+  margin-top: 15px;
+  color: green;
+  font-weight: 600;
+  font-size: 1rem;
+`;
+
 const Dashboard = ({ userEmail }) => {
   const [studentView, setStudentView] = useState(null);
   const [feedback, setFeedback] = useState('');
   const [weather, setWeather] = useState({ temp: '27°C', condition: 'Sunny' });
   const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState('');
 
-  const API_URL = "https://server-u9ga.onrender.com/Student";
+  const API_URL = 'https://server-u9ga.onrender.com/Student';
 
   useEffect(() => {
     const fetchStudentData = async () => {
       try {
         const response = await axios.get(API_URL);
         const students = response.data;
-        
-        // Find the student based on their email
-        const currentUser = students.find((student) => student.email === userEmail);
+
+        const currentUser = students.find(
+          (student) => student.email === userEmail
+        );
 
         if (currentUser) {
-          // If a student is found, get the seat number for this student
-          const seat = currentUser.seat_number || 'Seat not assigned';
-          
-          // Set the student view data including seat
           setStudentView({
+            id: currentUser.id, // Student ID for updating feedback
             name: currentUser.name,
-            seat: seat,
+            seat: currentUser.seat_number || 'Seat not assigned',
             time: currentUser.time || 'Time not assigned',
             achievements: currentUser.achievements || [],
+            feedback: currentUser.feedback || '', // Existing feedback if any
           });
         } else {
-          setError("User data not found. Please check your login details.");
+          setError('User data not found. Please check your login details.');
         }
       } catch (error) {
-        console.error("Error fetching student data:", error);
-        setError("Failed to fetch user data. Please try again later.");
+        console.error('Error fetching student data:', error);
+        setError('Failed to fetch user data. Please try again later.');
       }
     };
 
     if (userEmail) {
       fetchStudentData();
     } else {
-      setError("No email provided. Please log in first.");
+      setError('No email provided. Please log in first.');
     }
   }, [userEmail]);
 
-  const handleFeedbackSubmit = () => {
-    console.log('Feedback Submitted:', feedback);
-    alert('Thank you for your feedback!');
-    setFeedback('');
+  const handleFeedbackSubmit = async () => {
+    if (!studentView || !studentView.id) {
+      setSuccessMessage('Error: Cannot submit feedback. Student not found.');
+      return;
+    }
+
+    if (!feedback.trim()) {
+      setSuccessMessage('Feedback cannot be empty.');
+      return;
+    }
+
+    try {
+      // Send PATCH request to update the student's feedback
+      await axios.patch(`${API_URL}/${studentView.id}`, {
+        feedback: feedback,
+      });
+
+      setSuccessMessage('Thank you for your feedback!');
+      setFeedback(''); // Reset the feedback input
+    } catch (error) {
+      console.error('Error submitting feedback:', error);
+      setSuccessMessage('Failed to submit feedback. Please try again later.');
+    }
   };
 
   if (error) return <div className="error-message">{error}</div>;
@@ -157,22 +185,32 @@ const Dashboard = ({ userEmail }) => {
 
   return (
     <AppContainer>
-     
-      <h1>Student Dashboard</h1>
-
+      
+        <h1>Student Dashboard</h1>
+      
 
       <Section>
         <h2>Personalized View</h2>
-        <p><strong>Name:</strong> {studentView.name}</p>
-        <p><strong>Seat:</strong> {studentView.seat}</p>
-        <p><strong>Time Slot:</strong>10:00 AM</p>
+        <p>
+          <strong>Name:</strong> {studentView.name}
+        </p>
+        <p>
+          <strong>Seat:</strong> {studentView.seat}
+        </p>
+        <p>
+          <strong>Time Slot:</strong>10:00 AM
+        </p>
       </Section>
 
       <Section>
         <h2>Weather Widget</h2>
         <WeatherWidget>
-          <p><strong>Temperature:</strong> {weather.temp}</p>
-          <p><strong>Condition:</strong> {weather.condition}</p>
+          <p>
+            <strong>Temperature:</strong> {weather.temp}
+          </p>
+          <p>
+            <strong>Condition:</strong> {weather.condition}
+          </p>
         </WeatherWidget>
       </Section>
 
@@ -185,6 +223,7 @@ const Dashboard = ({ userEmail }) => {
           onChange={(e) => setFeedback(e.target.value)}
         />
         <button onClick={handleFeedbackSubmit}>Submit Feedback</button>
+        {successMessage && <SuccessMessage>{successMessage}</SuccessMessage>}
       </Section>
 
       <Section>
