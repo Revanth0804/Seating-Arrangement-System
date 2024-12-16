@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import "./Header.css";
 
-const Header = ({ onLogout }) => {
+const AdminHeader = ({ onLogout }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate(); // Hook for navigation
 
@@ -48,31 +48,17 @@ const Header = ({ onLogout }) => {
                 Home
               </NavLink>
             </li>
+            <li>
+              <NavLink className="nav-link" to="/admindashboard" onClick={toggleMenu}>
+                Admin Dashboard
+              </NavLink>
+            </li>
             {/* <li>
               <NavLink className="nav-link" to="/Dashboard" onClick={toggleMenu}>
                 Dashboard
               </NavLink>
             </li> */}
-            <li>
-              <NavLink className="nav-link" to="/Dashboard1" onClick={toggleMenu}>
-                Dashboard
-              </NavLink>
-            </li>
-            <li>
-              <NavLink className="nav-link" to="/findseat" onClick={toggleMenu}>
-                Find Seat
-              </NavLink>
-            </li>
-            <li>
-              <NavLink className="nav-link" to="/visualmap" onClick={toggleMenu}>
-                Map
-              </NavLink>
-            </li>
-            <li>
-              <NavLink className="nav-link" to="/profile" onClick={toggleMenu}>
-                Profile
-              </NavLink>
-            </li>
+            
             <li>
               <button id="logoutbtn" onClick={handleLogout}>
                 Logout
@@ -85,4 +71,4 @@ const Header = ({ onLogout }) => {
   );
 };
 
-export default Header;
+export default AdminHeader;

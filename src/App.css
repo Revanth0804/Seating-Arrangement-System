@@ -81,9 +81,10 @@ header{
 }
 
 #navbtn1, #navbtn2{
-  width: 100px;
+  width: 100%;
   background-color: red;
   margin-left: 70%;
+  margin: 10px;
 }
 
 #logoutbtn{

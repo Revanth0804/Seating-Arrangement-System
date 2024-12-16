@@ -1,6 +1,18 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import styled from "styled-components";
+
+const Title = styled.h1`
+  text-align: center;
+  margin-top :10px;
+  font-size: 40px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+`;
+
+
 
 const LoginForm = ({ setLoggedInUser }) => {
   const [loginData, setLoginData] = useState({
@@ -46,7 +58,9 @@ const LoginForm = ({ setLoggedInUser }) => {
   };
 
   return (
-    <form className="login-form" onSubmit={handleLogin}>
+    <>
+      <Title>Student Login</Title>
+      <form className="login-form" onSubmit={handleLogin}>
       <div className="form-group">
         <input
           type="email"
@@ -77,6 +91,8 @@ const LoginForm = ({ setLoggedInUser }) => {
         </span>
       </p>
     </form>
+    </>
+    
   );
 };
 

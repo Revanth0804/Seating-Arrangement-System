@@ -15,7 +15,10 @@ function Header1() {
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <NavLink to="/Login"><button id='navbtn1'>Login</button></NavLink>  
+                    <NavLink to="/Login"><button id='navbtn1'>Student Login</button></NavLink>  
+                </li>
+                <li class="nav-item active">
+                    <NavLink to="/adminlogin"><button id='navbtn1'>Admin Login</button></NavLink>  
                 </li>
                 {/* <li class="nav-item">
                     <NavLink to="/Signup"><button id='navbtn2'>Signup</button></NavLink>

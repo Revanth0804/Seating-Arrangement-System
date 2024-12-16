@@ -4,7 +4,6 @@ import MainLayout from "../layouts/MainLayout";
 import Home from "../pages/Home";
 import AdminDashboard from "../pages/AdminDashboard";
 import FindSeat from "../pages/FindSeat";
-// import VisualMap from "../pages/VisualMap1";
 import SignUpForm from "../pages/SignUpForm";
 import LoginForm from "../pages/LoginForm";
 import LandingPage from "../pages/LandingPage";
@@ -12,27 +11,44 @@ import UserProfile from "../pages/UserProfile";
 import VisualMap from "../pages/VisualMap";
 import Dashboard1 from "../pages/Dashboard1";
 import ProtectedRoute from "../components/ProtectedRouter";
+import AdminLoginForm from "../pages/AdminLoginForm";
+import AdminProtectedRoute from "../components/AdminProtectedRoute";
 
 function Routers() {
-  const [userEmail, setUserEmail] = useState(localStorage.getItem("userEmail") || null);
+  const [userEmail, setUserEmail] = useState(null);
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
 
-  // Persist user email on login
   useEffect(() => {
-    if (userEmail) {
-      localStorage.setItem("userEmail", userEmail);
-    } else {
-      localStorage.removeItem("userEmail");
-    }
-  }, [userEmail]);
+    const storedUserEmail = localStorage.getItem("userEmail");
+    const storedAdminLogin = localStorage.getItem("isAdminLoggedIn") === "true";
 
-  // Function to handle logout
+    if (storedUserEmail) {
+      setUserEmail(storedUserEmail);
+    }
+    setIsAdminLoggedIn(storedAdminLogin);
+  }, []);
+
+  useEffect(() => {
+    if (isAdminLoggedIn) {
+      localStorage.setItem("isAdminLoggedIn", "true");
+    } else {
+      localStorage.removeItem("isAdminLoggedIn");
+    }
+  }, [isAdminLoggedIn]);
+
   const handleLogout = () => {
     setUserEmail(null);
+    setIsAdminLoggedIn(false); // Clear admin login state
+    localStorage.removeItem("userEmail");
+    localStorage.removeItem("isAdminLoggedIn");
   };
+
+  const isUserLoggedIn = !!userEmail;
+  const isLoggedIn = isUserLoggedIn || isAdminLoggedIn;
 
   return (
     <Router>
-      <MainLayout isLoggedIn={!!userEmail} onLogout={handleLogout}>
+      <MainLayout isLoggedIn={isLoggedIn} isAdminLoggedIn={isAdminLoggedIn} onLogout={handleLogout}>
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<LandingPage />} />
@@ -41,44 +57,32 @@ function Routers() {
             path="/login"
             element={<LoginForm setLoggedInUser={(email) => setUserEmail(email)} />}
           />
+          <Route
+            path="/adminlogin"
+            element={<AdminLoginForm setLoggedInAdmin={() => setIsAdminLoggedIn(true)} />}
+          />
 
-          {/* Protected Routes */}
+          {/* User Protected Routes */}
           <Route
             path="/loginhome"
             element={
-              <ProtectedRoute isLoggedIn={!!userEmail}>
+              <ProtectedRoute isLoggedIn={isUserLoggedIn}>
                 <Home />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admindashboard"
-            element={
-              <ProtectedRoute isLoggedIn={!!userEmail}>
-                <AdminDashboard />
               </ProtectedRoute>
             }
           />
           <Route
             path="/findseat"
             element={
-              <ProtectedRoute isLoggedIn={!!userEmail}>
+              <ProtectedRoute isLoggedIn={isUserLoggedIn}>
                 <FindSeat />
               </ProtectedRoute>
             }
           />
-          {/* <Route
-            path="/visualmap"
-            element={
-              <ProtectedRoute isLoggedIn={!!userEmail}>
-                <VisualMap1 userEmail={userEmail}/>
-              </ProtectedRoute>
-            }
-          /> */}
           <Route
             path="/visualmap"
             element={
-              <ProtectedRoute isLoggedIn={!!userEmail}>
+              <ProtectedRoute isLoggedIn={isUserLoggedIn}>
                 <VisualMap userEmail={userEmail} />
               </ProtectedRoute>
             }
@@ -86,7 +90,7 @@ function Routers() {
           <Route
             path="/dashboard1"
             element={
-              <ProtectedRoute isLoggedIn={!!userEmail}>
+              <ProtectedRoute isLoggedIn={isUserLoggedIn}>
                 <Dashboard1 userEmail={userEmail} />
               </ProtectedRoute>
             }
@@ -94,9 +98,19 @@ function Routers() {
           <Route
             path="/profile"
             element={
-              <ProtectedRoute isLoggedIn={!!userEmail}>
+              <ProtectedRoute isLoggedIn={isUserLoggedIn}>
                 <UserProfile userEmail={userEmail} />
               </ProtectedRoute>
+            }
+          />
+
+          {/* Admin Protected Routes */}
+          <Route
+            path="/admindashboard"
+            element={
+              <AdminProtectedRoute isAdminLoggedIn={isAdminLoggedIn}>
+                <AdminDashboard />
+              </AdminProtectedRoute>
             }
           />
         </Routes>
