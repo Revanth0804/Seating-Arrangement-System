@@ -111,7 +111,7 @@ const SuccessMessage = styled.span`
   font-size: 1rem;
 `;
 
-const Dashboard = ({ userEmail }) => {
+const Dashboard1 = ({ userEmail }) => {
   const [studentView, setStudentView] = useState(null);
   const [feedback, setFeedback] = useState('');
   const [weather, setWeather] = useState({ temp: '27°C', condition: 'Sunny' });
@@ -236,4 +236,4 @@ const Dashboard = ({ userEmail }) => {
   );
 };
 
-export default Dashboard;
+export default Dashboard1;

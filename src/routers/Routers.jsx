@@ -4,12 +4,13 @@ import MainLayout from "../layouts/MainLayout";
 import Home from "../pages/Home";
 import AdminDashboard from "../pages/AdminDashboard";
 import FindSeat from "../pages/FindSeat";
-import VisualMap from "../pages/VisualMap";
+// import VisualMap from "../pages/VisualMap1";
 import SignUpForm from "../pages/SignUpForm";
 import LoginForm from "../pages/LoginForm";
 import LandingPage from "../pages/LandingPage";
 import UserProfile from "../pages/UserProfile";
-import Dashboard from "../pages/Dashboard";
+import VisualMap from "../pages/VisualMap";
+import Dashboard1 from "../pages/Dashboard1";
 import ProtectedRoute from "../components/ProtectedRouter";
 
 function Routers() {
@@ -35,9 +36,9 @@ function Routers() {
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<LandingPage />} />
-          <Route path="/Signup" element={<SignUpForm />} />
+          <Route path="/signup" element={<SignUpForm />} />
           <Route
-            path="/Login"
+            path="/login"
             element={<LoginForm setLoggedInUser={(email) => setUserEmail(email)} />}
           />
 
@@ -66,19 +67,27 @@ function Routers() {
               </ProtectedRoute>
             }
           />
+          {/* <Route
+            path="/visualmap"
+            element={
+              <ProtectedRoute isLoggedIn={!!userEmail}>
+                <VisualMap1 userEmail={userEmail}/>
+              </ProtectedRoute>
+            }
+          /> */}
           <Route
             path="/visualmap"
             element={
               <ProtectedRoute isLoggedIn={!!userEmail}>
-                <VisualMap />
+                <VisualMap userEmail={userEmail} />
               </ProtectedRoute>
             }
           />
           <Route
-            path="/Dashboard"
+            path="/dashboard1"
             element={
               <ProtectedRoute isLoggedIn={!!userEmail}>
-                <Dashboard userEmail={userEmail} />
+                <Dashboard1 userEmail={userEmail} />
               </ProtectedRoute>
             }
           />

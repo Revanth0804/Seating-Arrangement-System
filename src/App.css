@@ -282,7 +282,9 @@ form button:hover {
 }
 
 
-
+#chair{
+  font-size: 30px;
+}
 
 #nav-link{
  gap: 20px;

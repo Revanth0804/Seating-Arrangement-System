@@ -48,8 +48,13 @@ const Header = ({ onLogout }) => {
                 Home
               </NavLink>
             </li>
-            <li>
+            {/* <li>
               <NavLink className="nav-link" to="/Dashboard" onClick={toggleMenu}>
+                Dashboard
+              </NavLink>
+            </li> */}
+            <li>
+              <NavLink className="nav-link" to="/Dashboard1" onClick={toggleMenu}>
                 Dashboard
               </NavLink>
             </li>
