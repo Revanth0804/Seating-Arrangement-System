@@ -1,5 +1,16 @@
 import React, { useState } from "react";
 import axios from "axios";
+import styled from "styled-components";
+
+const Title = styled.h1`
+  text-align: center;
+  margin-top :10px;
+  font-size: 40px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+`;
+
 
 const SignUpForm = ({ setIsLogin, users, setUsers }) => {
   const [newUser, setNewUser] = useState({
@@ -69,6 +80,8 @@ const SignUpForm = ({ setIsLogin, users, setUsers }) => {
   };
 
   return (
+    <>
+      <Title>Student SignUp Form</Title>
     <form className="signup-form" onSubmit={addUser}>
       <div className="form-group">
         <input
@@ -117,6 +130,9 @@ const SignUpForm = ({ setIsLogin, users, setUsers }) => {
         Sign Up
       </button>
     </form>
+    
+    </>
+    
   );
 };
 

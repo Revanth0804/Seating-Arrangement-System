@@ -322,7 +322,7 @@ form button:hover {
   border-radius: 8px; /* Rounded corners */
   background-color: #fcfaee; /* Light background color */
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-  height: 69vh;
+  min-height: 69vh;
 }
 
 
@@ -379,7 +379,7 @@ form button:hover {
 .landing-page{
   padding-top: 1%;
   background-color:#75e6da;
-  height:750px;
+  min-height:750px;
 }
 
 #carouselExampleIndicators{
