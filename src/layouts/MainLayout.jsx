@@ -3,10 +3,10 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Header1 from "../components/Header1";
 
-function MainLayout({ children, isLoggedIn }) {
+function MainLayout({ children, isLoggedIn, onLogout }) {
   return (
     <>
-      {isLoggedIn ? <Header /> : <Header1 />}
+      {isLoggedIn ? <Header onLogout={onLogout} /> : <Header1 />}
       {children}
       <Footer />
     </>

@@ -1,12 +1,19 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import "./Header.css";
 
-const Header = () => {
+const Header = ({ onLogout }) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate(); // Hook for navigation
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
+  };
+
+  const handleLogout = () => {
+    onLogout(); // Call the logout function
+    toggleMenu(); // Close the menu
+    navigate("/"); // Redirect to LandingPage
   };
 
   return (
@@ -67,11 +74,10 @@ const Header = () => {
               </NavLink>
             </li>
             <li>
-                <NavLink to="/"  className="nav-link" onClick={toggleMenu}>
-                  <button id='logoutbtn'>Logout</button>
-                </NavLink>  
-            </li>        
-            
+              <button id="logoutbtn" onClick={handleLogout}>
+                Logout
+              </button>
+            </li>
           </ul>
         </div>
       </div>

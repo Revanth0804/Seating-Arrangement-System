@@ -14,9 +14,14 @@ import Dashboard from "../pages/Dashboard";
 function Routers() {
   const [userEmail, setUserEmail] = useState(null);
 
+  // Function to handle logout
+  const handleLogout = () => {
+    setUserEmail(null);
+  };
+
   return (
     <Router>
-      <MainLayout isLoggedIn={!!userEmail}>
+      <MainLayout isLoggedIn={!!userEmail} onLogout={handleLogout}>
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/Signup" element={<SignUpForm />} />
