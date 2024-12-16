@@ -1,11 +1,15 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 
 const AppContainer = styled.div`
   font-family: Arial, sans-serif;
   padding: 20px;
   background-color: #f7f9fc;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const Header = styled.header`
@@ -15,6 +19,7 @@ const Header = styled.header`
   h1 {
     font-size: 2.5rem;
     color: #333;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
   }
 `;
 
@@ -23,12 +28,26 @@ const Section = styled.div`
   padding: 20px;
   background-color: #fff;
   border: 1px solid #ddd;
-  border-radius: 5px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 800px;
+  transition: box-shadow 0.3s ease-in-out;
 
   h2 {
     margin-bottom: 15px;
     font-size: 1.5rem;
     color: #555;
+    font-weight: 600;
+  }
+
+  &:hover {
+    box-shadow: 30px 30px 42px rgba(0, 0, 0, 0.15);
+  }
+
+  p {
+    font-size: 1.1rem;
+    color: #333;
   }
 
   button {
@@ -39,40 +58,93 @@ const Section = styled.div`
     border-radius: 5px;
     cursor: pointer;
     margin-top: 10px;
-    transition: background-color 0.3s;
-
+    transition: background-color 0.3s, transform 0.2s ease;
+    
     &:hover {
       background-color: #0056b3;
+      transform: scale(1.05);
     }
   }
 
   input, textarea {
     width: 100%;
     margin: 10px 0;
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    font-size: 1rem;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+
+    &:focus {
+      border-color: #007bff;
+    }
   }
 `;
 
 const WeatherWidget = styled.div`
   text-align: center;
-  padding: 10px;
+  padding: 20px;
   border: 1px solid #ddd;
-  border-radius: 5px;
+  border-radius: 8px;
   background-color: #e6f7ff;
   margin-top: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  p {
+    font-size: 1.2rem;
+    color: #007bff;
+  }
+
+  strong {
+    font-weight: 700;
+  }
 `;
 
-function Dashboard() {
+const Dashboard = ({ userEmail }) => {
+  const [studentView, setStudentView] = useState(null);
   const [feedback, setFeedback] = useState('');
-  const [weather, setWeather] = useState({ temp: '27°C', condition: 'Sunny' }); 
-  const [studentView, setStudentView] = useState({
-    name: 'John Doe',
-    seat: 'Row 5, Seat 12',
-    time: '10:00 AM',
-    achievements: ['Cum Laude']
-  });
+  const [weather, setWeather] = useState({ temp: '27°C', condition: 'Sunny' });
+  const [error, setError] = useState(null);
+
+  const API_URL = "https://server-u9ga.onrender.com/Student";
+
+  useEffect(() => {
+    const fetchStudentData = async () => {
+      try {
+        const response = await axios.get(API_URL);
+        const students = response.data;
+        
+        // Find the student based on their email
+        const currentUser = students.find((student) => student.email === userEmail);
+
+        if (currentUser) {
+          // If a student is found, get the seat number for this student
+          const seat = currentUser.seat_number || 'Seat not assigned';
+          
+          // Set the student view data including seat
+          setStudentView({
+            name: currentUser.name,
+            seat: seat,
+            time: currentUser.time || 'Time not assigned',
+            achievements: currentUser.achievements || [],
+          });
+        } else {
+          setError("User data not found. Please check your login details.");
+        }
+      } catch (error) {
+        console.error("Error fetching student data:", error);
+        setError("Failed to fetch user data. Please try again later.");
+      }
+    };
+
+    if (userEmail) {
+      fetchStudentData();
+    } else {
+      setError("No email provided. Please log in first.");
+    }
+  }, [userEmail]);
 
   const handleFeedbackSubmit = () => {
     console.log('Feedback Submitted:', feedback);
@@ -80,15 +152,20 @@ function Dashboard() {
     setFeedback('');
   };
 
+  if (error) return <div className="error-message">{error}</div>;
+  if (!studentView) return <div>Loading...</div>;
+
   return (
-    <AppContainer>     
+    <AppContainer>
+     
+      <h1>Student Dashboard</h1>
+
 
       <Section>
         <h2>Personalized View</h2>
         <p><strong>Name:</strong> {studentView.name}</p>
         <p><strong>Seat:</strong> {studentView.seat}</p>
-        <p><strong>Time Slot:</strong> {studentView.time}</p>
-        <p><strong>Achievements:</strong> {studentView.achievements.join(', ')}</p>
+        <p><strong>Time Slot:</strong>10:00 AM</p>
       </Section>
 
       <Section>
@@ -118,6 +195,6 @@ function Dashboard() {
       </Section>
     </AppContainer>
   );
-}
+};
 
 export default Dashboard;

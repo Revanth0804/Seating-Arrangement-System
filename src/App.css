@@ -44,7 +44,7 @@ button:hover {
 
 
 
-#nav, footer{
+#nav{
   background-color: #05445e;
   color: white;
 }
@@ -204,13 +204,6 @@ form button:hover {
   background-color: #189ab4;
 }
 
-/* Footer  */
-
-footer{
-  text-align: center;
-  height: 35  px;
-  align-content: center;
-}
 
 
 
@@ -383,7 +376,7 @@ footer{
 .landing-page{
   padding-top: 1%;
   background-color:#75e6da;
-  height: 550px;
+  height:750px;
 }
 
 #carouselExampleIndicators{
@@ -397,6 +390,13 @@ footer{
 #features{
   margin: 2%;
   margin-left: 4%;
+}
+
+
+#bgurl{
+  background-image: url(../src/assets/images/2.jpg);
+  height: 60vh;
+  background-size: 100% 100%;
 }
 
 

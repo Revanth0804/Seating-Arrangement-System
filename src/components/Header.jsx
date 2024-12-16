@@ -44,7 +44,7 @@ const Header = ({ onLogout }) => {
         <div className="card-body">
           <ul className="list-unstyled">
             <li>
-              <NavLink className="nav-link" to="/loginhome" onClick={toggleMenu}>
+              <NavLink className="nav-link" to="/" onClick={toggleMenu}>
                 Home
               </NavLink>
             </li>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import Home from "../pages/Home";
@@ -10,10 +10,19 @@ import LoginForm from "../pages/LoginForm";
 import LandingPage from "../pages/LandingPage";
 import UserProfile from "../pages/UserProfile";
 import Dashboard from "../pages/Dashboard";
-import ProtectedRoute from "../components/ProtectedRoute";
+import ProtectedRoute from "../components/ProtectedRouter";
 
 function Routers() {
-  const [userEmail, setUserEmail] = useState(null);
+  const [userEmail, setUserEmail] = useState(localStorage.getItem("userEmail") || null);
+
+  // Persist user email on login
+  useEffect(() => {
+    if (userEmail) {
+      localStorage.setItem("userEmail", userEmail);
+    } else {
+      localStorage.removeItem("userEmail");
+    }
+  }, [userEmail]);
 
   // Function to handle logout
   const handleLogout = () => {
@@ -69,7 +78,7 @@ function Routers() {
             path="/Dashboard"
             element={
               <ProtectedRoute isLoggedIn={!!userEmail}>
-                <Dashboard />
+                <Dashboard userEmail={userEmail} />
               </ProtectedRoute>
             }
           />
