@@ -3,57 +3,59 @@ import { NavLink, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 // Styled Components
+
 const HeaderContainer = styled.header`
-  .navbar {
-    background-color: #05445e;
-    padding: 10px 20px;
-  }
+  position: sticky;
+  top: 0;
+  z-index: 1050;
+`;
 
-  #logo {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-  }
+const Navbar = styled.nav`
+  background-color: #05445e;
+  color: white;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+`;
 
-  #title {
-    color: white;
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-decoration: none;
-    margin-left: 10px;
-  }
+const Logo = styled.img`
+  margin-left: 2%;
+  height: 50px;
+`;
 
-  .navbar-toggler {
-    background: transparent;
-    border: none;
-  }
+const Title = styled.a`
+  margin-left: 1%;
+  color: white;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-weight: bold;
+`;
 
-  .navbar-toggler-icon {
-    width: 50px;
-    height: 35px;
-    background-color: white;
-    display: block;
-    position: relative;
-  }
+const NavbarToggler = styled.button`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-left: auto;
 
-  .navbar-toggler-icon::before,
-  .navbar-toggler-icon::after {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 4px;
-    background-color: white;
-    left: 0;
-    transition: transform 0.3s ease;
+  &:focus {
+    outline: none;
   }
+`;
 
-  .navbar-toggler-icon::before {
-    top: 0;
-  }
-
-  .navbar-toggler-icon::after {
-    bottom: 0;
-  }
+const NavbarTogglerIcon = styled.div`
+  width: 100%;
+  height: 4px;
+  background-color: #ffffff;
+  border-radius: 2px;
+  transition: all 0.3s linear;
 `;
 
 const MenuCard = styled.div`
@@ -65,13 +67,22 @@ const MenuCard = styled.div`
   background-color: #05445e;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
   padding: 20px;
-  z-index: 1050;
   transform: ${({ isOpen }) => (isOpen ? "translateX(0)" : "translateX(-100%)")};
   transition: transform 0.3s ease-in-out;
 `;
 
+const NavList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+`;
+
+const NavItem = styled.li`
+  margin-bottom: 10px;
+`;
+
 const MenuItem = styled(NavLink)`
-  color: white !important;
+  color: white;
   font-size: 1rem;
   padding: 15px;
   text-align: left;
@@ -79,31 +90,30 @@ const MenuItem = styled(NavLink)`
   text-decoration: none;
 
   &:hover {
-    color: #80ced7 !important;
+    color: #80ced7;
     background-color: #033649;
     border-radius: 4px;
   }
 `;
 
 const LogoutButton = styled.button`
-  background-color: #f44336;
+  width: 100px;
+  background-color: red;
   color: white;
   padding: 10px 15px;
-  font-size: 1rem;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #d32f2f;
+    background-color: #ff6b6b;
   }
 `;
 
 // Header Component
 const Header = ({ onLogout }) => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const navigate = useNavigate(); // Hook for navigation
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -117,60 +127,48 @@ const Header = ({ onLogout }) => {
 
   return (
     <HeaderContainer>
-      <nav className="navbar" id="nav">
-        <div className="container-fluid">
-          <img src="./src/assets/images/logo1.jpeg" alt="Logo" id="logo" />
-          <a className="navbar-brand" href="#" id="title">
-            Convocation Seating Arrangement
-          </a>
-          <button
-            className="navbar-toggler"
-            type="button"
-            onClick={toggleMenu}
-            aria-expanded={menuOpen}
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-        </div>
-      </nav>
+      <Navbar>
+        <Logo src="./src/assets/images/logo1.jpeg" alt="Logo" />
+        <Title href="/">Convocation Seating Arrangement</Title>
+        <NavbarToggler onClick={toggleMenu} aria-expanded={menuOpen}>
+          <NavbarTogglerIcon />
+          <NavbarTogglerIcon />
+          <NavbarTogglerIcon />
+        </NavbarToggler>
+      </Navbar>
 
       {/* Side Card Menu */}
       <MenuCard isOpen={menuOpen}>
-        <div>
-          <ul className="list-unstyled">
-            <li>
-              <MenuItem to="/" onClick={toggleMenu}>
-                Home
-              </MenuItem>
-            </li>
-            <li>
-              <MenuItem to="/Dashboard1" onClick={toggleMenu}>
-                Dashboard
-              </MenuItem>
-            </li>
-            <li>
-              <MenuItem to="/findseat" onClick={toggleMenu}>
-                Find Seat
-              </MenuItem>
-            </li>
-            <li>
-              <MenuItem to="/visualmap" onClick={toggleMenu}>
-                Map
-              </MenuItem>
-            </li>
-            <li>
-              <MenuItem to="/profile" onClick={toggleMenu}>
-                Profile
-              </MenuItem>
-            </li>
-            <li>
-              <LogoutButton id="logoutbtn" onClick={handleLogout}>
-                Logout
-              </LogoutButton>
-            </li>
-          </ul>
-        </div>
+        <NavList>
+          <NavItem>
+            <MenuItem to="/" onClick={toggleMenu}>
+              Home
+            </MenuItem>
+          </NavItem>
+          <NavItem>
+            <MenuItem to="/Dashboard1" onClick={toggleMenu}>
+              Dashboard
+            </MenuItem>
+          </NavItem>
+          <NavItem>
+            <MenuItem to="/findseat" onClick={toggleMenu}>
+              Find Seat
+            </MenuItem>
+          </NavItem>
+          <NavItem>
+            <MenuItem to="/visualmap" onClick={toggleMenu}>
+              Map
+            </MenuItem>
+          </NavItem>
+          <NavItem>
+            <MenuItem to="/profile" onClick={toggleMenu}>
+              Profile
+            </MenuItem>
+          </NavItem>
+          <NavItem>
+            <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
+          </NavItem>
+        </NavList>
       </MenuCard>
     </HeaderContainer>
   );

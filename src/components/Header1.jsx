@@ -1,73 +1,148 @@
-import React from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
-import styled from 'styled-components';
+import React from "react";
+import { NavLink, useLocation } from "react-router-dom";
+import styled from "styled-components";
 
-// Define a styled component for the <p> tag
+// Styled Components
+
+const HeaderContainer = styled.header`
+  position: sticky;
+  top: 0;
+  z-index: 1050;
+  background-color: #05445e;
+  color: white;
+`;
+
+const Navbar = styled.nav`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background-color: #05445e;
+`;
+
+const Logo = styled.img`
+  height: 50px;
+  margin-left: 2%;
+`;
+
+const Title = styled.a`
+  margin-left: 1%;
+  color: white;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+`;
+
+const NavbarCollapse = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const NavList = styled.ul`
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  margin-left: auto;
+`;
+
+const NavItem = styled.li`
+  margin: 0 10px;
+`;
+
+const NavButton = styled.button`
+  background-color: red;
+  width: 150px;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin: 10px;
+
+  &:hover {
+    background-color: #ff6b6b;
+  }
+`;
+
 const StyledParagraph = styled.p`
   font-size: 18px;
   margin: 14px;
   font-weight: bold;
 `;
 
-function Header1() {
-  const location = useLocation(); // Get current location
+const NavbarToggler = styled.button`
+  width: 40px;
+  height: 40px;
+  border: none;
+  background-color: white;
+  border-radius: 5px;
+  display: none; /* Hidden for larger screens */
+  cursor: pointer;
 
-  // Check if the current path is the admin login page, student login page, or landing page
-  const isAdminLoginPage = location.pathname === '/adminlogin';
-  const isStudentLoginPage = location.pathname === '/login';
-  const isLandingPage = location.pathname === '/'; // Check for LandingPage
+  &:focus {
+    outline: none;
+  }
+`;
+
+const NavbarTogglerIcon = styled.span`
+  display: block;
+  width: 25px;
+  height: 3px;
+  background-color: #05445e;
+  margin: 5px auto;
+`;
+
+// Component
+function Header1() {
+  const location = useLocation();
+
+  // Check the current path
+  const isAdminLoginPage = location.pathname === "/adminlogin";
+  const isStudentLoginPage = location.pathname === "/login";
+  const isLandingPage = location.pathname === "/";
 
   return (
-    <>
-      <header1>
-        <nav className="navbar navbar-expand-lg" id="nav">
-          <img src="./src/assets/images/logo1.jpeg" alt="" id="logo" />
-          <a className="navbar-brand" href="/" id="title">
-            Convocation Seating Arrangement
-          </a>
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
+    <HeaderContainer>
+      <Navbar>
+        <Logo src="./src/assets/images/logo1.jpeg" alt="Logo" />
+        <Title href="/">Convocation Seating Arrangement</Title>
 
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav mr-auto">
-              {/* Hide the Home button if on the landing page */}
-              {!isLandingPage && (
-                <li className="nav-item active">
-                  <NavLink to="/">
-                    {/* Apply the styled component here */}
-                    <StyledParagraph>Home</StyledParagraph>
-                  </NavLink>
-                </li>
-              )}
-              {/* Only show the buttons that are not on the current page */}
-              {!isStudentLoginPage && (
-                <li className="nav-item active">
-                  <NavLink to="/login">
-                    <button id="navbtn1">Student Login</button>
-                  </NavLink>
-                </li>
-              )}
-              {!isAdminLoginPage && (
-                <li className="nav-item active">
-                  <NavLink to="/adminlogin">
-                    <button id="navbtn1">Admin Login</button>
-                  </NavLink>
-                </li>
-              )}
-            </ul>
-          </div>
-        </nav>
-      </header1>
-    </>
+        <NavbarToggler>
+          <NavbarTogglerIcon />
+          <NavbarTogglerIcon />
+          <NavbarTogglerIcon />
+        </NavbarToggler>
+
+        <NavbarCollapse>
+          <NavList>
+            {!isLandingPage && (
+              <NavItem>
+                <NavLink to="/" className="nav-link">
+                  <StyledParagraph>Home</StyledParagraph>
+                </NavLink>
+              </NavItem>
+            )}
+            {!isStudentLoginPage && (
+              <NavItem>
+                <NavLink to="/login" className="nav-link">
+                  <NavButton>Student Login</NavButton>
+                </NavLink>
+              </NavItem>
+            )}
+            {!isAdminLoginPage && (
+              <NavItem>
+                <NavLink to="/adminlogin" className="nav-link">
+                  <NavButton>Admin Login</NavButton>
+                </NavLink>
+              </NavItem>
+            )}
+          </NavList>
+        </NavbarCollapse>
+      </Navbar>
+    </HeaderContainer>
   );
 }
 
