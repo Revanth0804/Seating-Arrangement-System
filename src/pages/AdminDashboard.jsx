@@ -8,6 +8,10 @@ const AdminDashboardContainer = styled.main`
   padding: 20px;
 `;
 
+const Title = styled.h1`
+  text-align: center;
+`
+
 const Section = styled.section`
   margin: 20px 0;
 `;
@@ -189,6 +193,7 @@ const AdminDashboard = () => {
 
   return (
     <AdminDashboardContainer>
+      <Title>Admin Dashboard</Title>
       <Section>
         <Card bgcolor="#f0f8ff">
           <Heading>Add New Student</Heading>
