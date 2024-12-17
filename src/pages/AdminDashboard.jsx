@@ -1,6 +1,86 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import styled from "styled-components";
 
+// Styled Components
+const AdminDashboardContainer = styled.main`
+  line-height: 1.8;
+  padding: 20px;
+`;
+
+const Section = styled.section`
+  margin: 20px 0;
+`;
+
+const Heading = styled.h2`
+  text-align: center;
+  color: #05445e;
+`;
+
+const Card = styled.div`
+  background-color: ${({ bgcolor }) => bgcolor || "#f7f9fa"};
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+`;
+
+const SubHeading = styled.h4`
+  margin-bottom: 15px;
+`;
+
+const Input = styled.input`
+  margin-left: 2%;
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 200px;
+`;
+
+const Button = styled.button`
+  margin-top: 1%;
+  margin-left: 2%;
+  padding: 10px 15px;
+  width: ${({ wide }) => (wide ? "200px" : "auto")};
+  background-color: ${({ primary }) => (primary ? "#05445e" : "#e74c3c")};
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${({ primary }) => (primary ? "#189ab4" : "#c0392b")};
+  }
+`;
+
+const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+`;
+
+const TableHeader = styled.th`
+  padding: 10px;
+  border: 1px solid #0b0202;
+  text-align: left;
+  background-color: #05445e;
+  color: white;
+`;
+
+const TableCell = styled.td`
+  padding: 10px;
+  border: 1px solid #0b0202;
+  text-align: left;
+`;
+
+const StatusMessage = styled.p`
+  margin-top: 10px;
+  font-weight: bold;
+  color: #05445e;
+`;
+
+// AdminDashboard Component
 const AdminDashboard = () => {
   const [seatingData, setSeatingData] = useState([]);
   const [statusMessage, setStatusMessage] = useState("Waiting to add students...");
@@ -16,9 +96,9 @@ const AdminDashboard = () => {
 
   const api_url = "https://server-u9ga.onrender.com/Student";
 
-  
   useEffect(() => {
-    axios.get(api_url)
+    axios
+      .get(api_url)
       .then((response) => {
         setSeatingData(response.data);
         setStatusMessage("Data loaded successfully.");
@@ -28,13 +108,11 @@ const AdminDashboard = () => {
       });
   }, []);
 
-  
   const handleEdit = (student) => {
     setEditStudent(student);
     setNewSeatNumber(student.seat_number);
   };
 
-  
   const handleSave = () => {
     if (!newSeatNumber) {
       setStatusMessage("Seat number cannot be empty!");
@@ -43,7 +121,8 @@ const AdminDashboard = () => {
 
     const updatedStudent = { ...editStudent, seat_number: newSeatNumber };
 
-    axios.put(`${api_url}/${editStudent.id}`, updatedStudent) 
+    axios
+      .put(`${api_url}/${editStudent.id}`, updatedStudent)
       .then(() => {
         const updatedSeatingData = seatingData.map((student) =>
           student.id === editStudent.id ? updatedStudent : student
@@ -58,15 +137,14 @@ const AdminDashboard = () => {
       });
   };
 
-  
   const handleCancel = () => {
     setEditStudent(null);
     setNewSeatNumber("");
   };
 
-  
   const handleDelete = (id) => {
-    axios.delete(`${api_url}/${id}`) 
+    axios
+      .delete(`${api_url}/${id}`)
       .then(() => {
         const updatedSeatingData = seatingData.filter(
           (student) => student.id !== id
@@ -91,9 +169,10 @@ const AdminDashboard = () => {
       return;
     }
 
-    axios.post(api_url, newStudent)
+    axios
+      .post(api_url, newStudent)
       .then((response) => {
-        setSeatingData([...seatingData, response.data]); 
+        setSeatingData([...seatingData, response.data]);
         setNewStudent({
           registration_number: "",
           name: "",
@@ -109,114 +188,111 @@ const AdminDashboard = () => {
   };
 
   return (
-    <>
-      <main>
-        <section id="admin-dashboard" className="section">
-          <h2>Admin Dashboard</h2>
-
-         
-          <div className="add-student-section">
-            <h4>Add New Student</h4>
-            <input
+    <AdminDashboardContainer>
+      <Section>
+        <Card bgcolor="#f0f8ff">
+          <Heading>Add New Student</Heading>
+          <div>
+            <Input
               type="text"
               placeholder="Registration Number"
-              id='ip'
               value={newStudent.registration_number}
               onChange={(e) =>
                 setNewStudent({ ...newStudent, registration_number: e.target.value })
               }
             />
-            <input
+            <Input
               type="text"
               placeholder="Name"
               value={newStudent.name}
-              id='ip'
-              onChange={(e) => setNewStudent({ ...newStudent, name: e.target.value })}
+              onChange={(e) =>
+                setNewStudent({ ...newStudent, name: e.target.value })
+              }
             />
-            <input
+            <Input
               type="text"
               placeholder="Department"
               value={newStudent.department}
-              id='ip'
               onChange={(e) =>
                 setNewStudent({ ...newStudent, department: e.target.value })
               }
             />
-            <input
+            <Input
               type="number"
               placeholder="Year"
               value={newStudent.year}
-              id='ip'
-              onChange={(e) => setNewStudent({ ...newStudent, year: e.target.value })}
+              onChange={(e) =>
+                setNewStudent({ ...newStudent, year: e.target.value })
+              }
             />
-            <input
+            <Input
               type="text"
               placeholder="Seat Number"
               value={newStudent.seat_number}
-              id='ip'
               onChange={(e) =>
                 setNewStudent({ ...newStudent, seat_number: e.target.value })
               }
             />
-            <button onClick={handleAddStudent} id='ipbtn'>Add Student</button>
+            <Button onClick={handleAddStudent} primary wide>
+              Add Student
+            </Button>
           </div>
+        </Card>
+      </Section>
 
-         
-          <div className="seating-table">
-            <h3>Manage Seats</h3>
-            <p className="status-message">
-              <b>Status: </b>
-              {statusMessage}
-            </p>
-            <table>
-              <thead>
-                <tr>
-                  <th>Reg. No.</th>
-                  <th>Name</th>
-                  <th>Department</th>
-                  <th>Year</th>
-                  <th>Seat No.</th>
-                  <th>Actions</th>
+      <Section>
+        <Card bgcolor="#eafaf1">
+          <Heading>Manage Seats</Heading>
+          <StatusMessage>Status: {statusMessage}</StatusMessage>
+          <Table>
+            <thead>
+              <tr>
+                <TableHeader>Reg. No.</TableHeader>
+                <TableHeader>Name</TableHeader>
+                <TableHeader>Department</TableHeader>
+                <TableHeader>Year</TableHeader>
+                <TableHeader>Seat No.</TableHeader>
+                <TableHeader>Actions</TableHeader>
+              </tr>
+            </thead>
+            <tbody>
+              {seatingData.map((student) => (
+                <tr key={student.id}>
+                  <TableCell>{student.registration_number}</TableCell>
+                  <TableCell>{student.name}</TableCell>
+                  <TableCell>{student.department}</TableCell>
+                  <TableCell>{student.year}</TableCell>
+                  <TableCell>
+                    {editStudent && editStudent.id === student.id ? (
+                      <Input
+                        type="text"
+                        value={newSeatNumber}
+                        onChange={(e) => setNewSeatNumber(e.target.value)}
+                      />
+                    ) : (
+                      student.seat_number
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {editStudent && editStudent.id === student.id ? (
+                      <>
+                        <Button onClick={handleSave}>Save</Button>
+                        <Button onClick={handleCancel}>Cancel</Button>
+                      </>
+                    ) : (
+                      <Button onClick={() => handleEdit(student)}>Edit</Button>
+                    )}
+                    <Button onClick={() => handleDelete(student.id)}>
+                      Delete
+                    </Button>
+                  </TableCell>
                 </tr>
-              </thead>
-              <tbody>
-                {seatingData.map((student) => (
-                  <tr key={student.id}>
-                    <td>{student.registration_number}</td>
-                    <td>{student.name}</td>
-                    <td>{student.department}</td>
-                    <td>{student.year}</td>
-                    <td>
-                      {editStudent && editStudent.id === student.id ? (
-                        <input
-                          type="text"
-                          value={newSeatNumber}
-                          onChange={(e) => setNewSeatNumber(e.target.value)}
-                          placeholder="Enter new seat number"
-                        />
-                      ) : (
-                        student.seat_number
-                      )}
-                    </td>
-                    <td>
-                      {editStudent && editStudent.id === student.id ? (
-                        <>
-                          <button onClick={handleSave}>Save</button>
-                          <button onClick={handleCancel}>Cancel</button>
-                        </>
-                      ) : (
-                        <button onClick={() => handleEdit(student)}>Edit</button>
-                      )}
-                      <button onClick={() => handleDelete(student.id)}>Delete</button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
-      </main>
-    </>
+              ))}
+            </tbody>
+          </Table>
+        </Card>
+      </Section>
+    </AdminDashboardContainer>
   );
 };
 
