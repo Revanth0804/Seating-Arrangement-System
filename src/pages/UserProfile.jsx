@@ -1,6 +1,93 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./UserProfile.css";
+import styled from "styled-components";
+
+const ProfileContainer = styled.div`
+  max-width: 400px;
+  margin: 1.5% auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+  text-align: center;
+`;
+
+const ProfileImage = styled.img`
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  margin-bottom: 20px;
+  object-fit: cover;
+  border: 4px solid #4caf50;
+`;
+
+const Heading = styled.h1`
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+`;
+
+const Label = styled.label`
+  display: block;
+  margin: 10px 0 5px;
+  font-weight: bold;
+  color: #555;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+`;
+
+const Button = styled.button`
+  padding: 10px 15px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+  background-color: ${(props) => (props.cancel ? "#f44336" : "#4caf50")};
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 5px;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: ${(props) =>
+      props.cancel ? "#d32f2f" : "#45a049"};
+  }
+`;
+
+const Info = styled.div`
+  text-align: left;
+  margin-top: 10px;
+`;
+
+const Paragraph = styled.p`
+  margin: 5px 0;
+  font-size: 16px;
+  color: #555;
+`;
+
+const SuccessMessage = styled.div`
+  color: #4caf50;
+  font-weight: bold;
+  margin-bottom: 15px;
+`;
+
+const ErrorMessage = styled.div`
+  color: #f44336;
+  font-weight: bold;
+  margin-bottom: 15px;
+`;
+
+const NonEditableSpan = styled.span`
+  font-size: 14px;
+  color: #888;
+`;
 
 const UserProfile = ({ userEmail }) => {
   const [user, setUser] = useState(null);
@@ -16,7 +103,9 @@ const UserProfile = ({ userEmail }) => {
       try {
         const response = await axios.get(API_URL);
         const students = response.data;
-        const currentUser = students.find((student) => student.email === userEmail);
+        const currentUser = students.find(
+          (student) => student.email === userEmail
+        );
 
         if (currentUser) {
           setUser(currentUser);
@@ -69,78 +158,73 @@ const UserProfile = ({ userEmail }) => {
     }
   };
 
-  if (error) return <div className="error-message">{error}</div>;
+  if (error) return <ErrorMessage>{error}</ErrorMessage>;
   if (!user) return <div>Loading...</div>;
 
   return (
-    <div className="profile-container">
-      <h1>My Profile</h1>
-      <img
+    <ProfileContainer>
+      <Heading>My Profile</Heading>
+      <ProfileImage
         src={formData?.profilePicture || "https://via.placeholder.com/100"}
         alt="Profile"
       />
-      <div className="info">
+      <Info>
         {isEditing ? (
           <div>
-            <label>
+            <Label>
               Upload Profile Picture:
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-              />
-            </label>
-            <label>
+              <Input type="file" accept="image/*" onChange={handleImageUpload} />
+            </Label>
+            <Label>
               Student Name:
-              <input
+              <Input
                 type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
               />
-            </label>
-            <label>
+            </Label>
+            <Label>
               Email:
-              <input
+              <Input
                 type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
               />
-            </label>
-            <label>
-              Year:
-              <span className="non-editable">{formData.year}</span>
-            </label>
-            <label>
-              Registration Number:
-              <span className="non-editable">{formData.registration_number}</span>
-            </label>
-            <button onClick={saveChanges}>Save</button>
-            <button className="cancel" onClick={() => setIsEditing(false)}>
+            </Label>
+            <Label>
+              Year: <NonEditableSpan>{formData.year}</NonEditableSpan>
+            </Label>
+            <Label>
+              Registration Number:{" "}
+              <NonEditableSpan>{formData.registration_number}</NonEditableSpan>
+            </Label>
+            <Button onClick={saveChanges}>Save</Button>
+            <Button cancel onClick={() => setIsEditing(false)}>
               Cancel
-            </button>
+            </Button>
           </div>
         ) : (
           <div>
-            <p>
+            <Paragraph>
               <strong>Registration Number:</strong> {user.registration_number}
-            </p>
-            <p>
+            </Paragraph>
+            <Paragraph>
               <strong>Student Name:</strong> {user.name}
-            </p>
-            <p>
+            </Paragraph>
+            <Paragraph>
               <strong>Email:</strong> {user.email}
-            </p>
-            <p>
+            </Paragraph>
+            <Paragraph>
               <strong>Year:</strong> {user.year}
-            </p>
-            <button onClick={() => setIsEditing(true)}>Edit</button>
+            </Paragraph>
+            <Button onClick={() => setIsEditing(true)}>Edit</Button>
           </div>
         )}
-      </div>
-      {successMessage && <div className="success-message">{successMessage}</div>}
-    </div>
+      </Info>
+      {successMessage && <SuccessMessage>{successMessage}</SuccessMessage>}
+    </ProfileContainer>
   );
 };
 

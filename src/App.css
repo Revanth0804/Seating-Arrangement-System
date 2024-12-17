@@ -29,11 +29,11 @@ button:hover {
 /* Nav */
 .menu-card {
     
-  background-color: #05445e; /* Set the card color */
+  background-color: #05445e; 
   
 }
 .menu-card .nav-link {
-  color: #ffffff !important; /* White text for better contrast */
+  color: #ffffff !important; 
 }
 
 .navbar-toggler{

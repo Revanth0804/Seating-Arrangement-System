@@ -20,7 +20,7 @@ const AdminLoginForm = ({ setLoggedInAdmin }) => {
 
   const API_URL = "https://server-u9ga.onrender.com/Admin";
 
-  // Helper to reset messages
+
   const clearMessages = () => {
     setErrorMessage("");
     setSuccessMessage("");
@@ -30,7 +30,6 @@ const AdminLoginForm = ({ setLoggedInAdmin }) => {
     e.preventDefault();
     clearMessages();
 
-    // Validation
     if (!loginData.email || !loginData.password) {
       setErrorMessage("Please fill in both email and password.");
       return;
@@ -46,7 +45,7 @@ const AdminLoginForm = ({ setLoggedInAdmin }) => {
 
       if (admin) {
         setSuccessMessage("Login successful! Redirecting...");
-        setLoggedInAdmin(admin.mail); // Pass admin email to parent state
+        setLoggedInAdmin(admin.mail);
         setTimeout(() => navigate("/admindashboard"), 2000);
       } else {
         setErrorMessage("Invalid email or password.");
@@ -87,7 +86,7 @@ const AdminLoginForm = ({ setLoggedInAdmin }) => {
         <p>
           Not an admin?{" "}
           <Link to="/login" className="link">
-            Go to User Login
+            Go to Student Login
           </Link>
         </p>
       </form>

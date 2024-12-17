@@ -82,7 +82,7 @@ const VisualMap = ({ userEmail }) => {
 
   return (
     <AppContainer>
-      <h1>Student Dashboard</h1>
+      <h1>Seat Details</h1>
 
       <Section>
         <h2>Your Seat: {studentView.seat} </h2>

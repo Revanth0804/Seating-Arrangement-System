@@ -1,15 +1,13 @@
 import React from "react";
-// import { FaChair } from "react-icons/fa";
 import { PiArmchairDuotone } from "react-icons/pi";
-import { LuRectangleHorizontal } from "react-icons/lu";
 import styled, { keyframes, css } from "styled-components";
 
-// Blinking animation
+
 const blink = keyframes`
   50% {
     opacity: 0.5;
     background-color: green;
-    border: 1px solid black
+    border: 1px solid black;
   }
 `;
 
@@ -23,11 +21,15 @@ const SeatingLayoutContainer = styled.div`
 const Row = styled.div`
   display: flex;
   gap: 5px;
+
+  & > button:nth-child(7n) {
+    margin-right: 70px; 
+  }
 `;
 
 const Seat = styled.button`
-  background-color: #f0f0f0;
-  border: 1px solid #ccc;
+  background-color: ${({ isRed }) => (isRed ? "blue" : "#f0f0f0")};
+  border: 1px solid  #ccc;
   border-radius: 5px;
   padding: 10px;
   cursor: pointer;
@@ -35,12 +37,12 @@ const Seat = styled.button`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  color: black;
+  color: ${({ isRed }) => (isRed ? "white" : "black")};
   animation: ${({ isHighlighted }) =>
     isHighlighted ? css`${blink} 1s infinite` : "none"};
 
   &:hover {
-    background-color: #d1e7ff;
+    background-color:#d1e7ff;
     border-color: #007bff;
   }
 `;
@@ -48,6 +50,11 @@ const Seat = styled.button`
 const SeatLabel = styled.span`
   font-size: 12px;
   margin-bottom: 5px;
+`;
+
+const ScreenImage = styled.img`
+  width: 70%;
+  margin-top: 20px;
 `;
 
 const VisualMap1 = ({ highlightedSeat }) => {
@@ -58,26 +65,25 @@ const VisualMap1 = ({ highlightedSeat }) => {
     <Row key={rowIndex}>
       {Array.from({ length: 20 }, (_, seatIndex) => {
         const seat_number = `${rowLabels[rowIndex]}${seatIndex + 1}`;
-
-        // Check if the current seat matches the highlightedSeat
         const isHighlighted = seat_number === highlightedSeat;
+        const isRed = rowLabels[rowIndex] === "K"; // Mark row K as red
 
         return (
-          <>
-            <Seat key={seat_number} isHighlighted={isHighlighted}>
-              <SeatLabel>{seat_number}</SeatLabel>
-              <PiArmchairDuotone id="chair"/>
-            </Seat>
-          </>
-
-          
-
+          <Seat key={seat_number} isHighlighted={isHighlighted} isRed={isRed}>
+            <SeatLabel>{seat_number}</SeatLabel>
+            <PiArmchairDuotone id="chair" />
+          </Seat>
         );
       })}
     </Row>
   ));
 
-  return <SeatingLayoutContainer>{rows}<img src="../src/assets/images/screen.png" width="50%"></img></SeatingLayoutContainer>;
+  return (
+    <SeatingLayoutContainer>
+      {rows}
+      <ScreenImage src="../src/assets/images/screen.png" alt="Screen" />
+    </SeatingLayoutContainer>
+  );
 };
 
 export default VisualMap1;
