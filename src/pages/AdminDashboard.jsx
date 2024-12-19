@@ -201,8 +201,16 @@ const AdminDashboard = () => {
       return;
     }
 
+    // Validate seat number range
+    if (newSeatNumber < 1 || newSeatNumber > 20) {
+      setStatusMessage("Seat number must be between 1 and 20!");
+      return;
+    }
+
     // Check if the seat_number already exists
-    const isSeatNumberExists = seatingData.some((student) => student.seat_number === seat_number);
+    const isSeatNumberExists = seatingData.some(
+      (student) => student.seat_number === seat_number
+    );
 
     if (isSeatNumberExists) {
       setStatusMessage("Seat number already exists!");
@@ -294,10 +302,18 @@ const AdminDashboard = () => {
             </Select>
 
             <Input
-              type="text"
+              type="number"
               placeholder="Seat Number"
               value={newSeatNumber}
-              onChange={(e) => setNewSeatNumber(e.target.value)}
+              onChange={(e) => {
+                // Ensure the value is within the range 1-20
+                const value = parseInt(e.target.value, 10);
+                if (value >= 1 && value <= 20) {
+                  setNewSeatNumber(value);
+                }
+              }}
+              min="1"
+              max="20"
             />
             <Button onClick={handleAddStudent} primary wide>
               Add Student
