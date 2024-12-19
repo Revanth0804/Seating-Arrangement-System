@@ -2,14 +2,39 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
 
+// Styled Components
 const AdminDashboardContainer = styled.main`
   line-height: 1.8;
   padding: 20px;
 `;
 
-const Title = styled.h1`
-  text-align: center;
-`
+const Select = styled.select`
+  margin-left: 2%;
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 200px;
+  background-color: #fff;
+  color: #05445e;
+  font-size: 16px;
+  cursor: pointer;
+
+  &:focus {
+    border-color: #05445e;
+    outline: none;
+  }
+
+  option {
+    padding: 10px;
+    background-color: #fff;
+    color: #05445e;
+  }
+
+  option:hover {
+    background-color: #eafaf1;
+  }
+`;
 
 const Section = styled.section`
   margin: 20px 0;
@@ -83,12 +108,13 @@ const StatusMessage = styled.p`
   color: #05445e;
 `;
 
-
+// AdminDashboard Component
 const AdminDashboard = () => {
   const [seatingData, setSeatingData] = useState([]);
   const [statusMessage, setStatusMessage] = useState("Waiting to add students...");
   const [editStudent, setEditStudent] = useState(null);
   const [newSeatNumber, setNewSeatNumber] = useState("");
+  const [newSeries, setNewSeries] = useState(""); // Store series separately
   const [newStudent, setNewStudent] = useState({
     registration_number: "",
     name: "",
@@ -113,7 +139,7 @@ const AdminDashboard = () => {
 
   const handleEdit = (student) => {
     setEditStudent(student);
-    setNewSeatNumber(student.seat_number);
+    setNewSeatNumber(student.seat_number); // Keep current seat number
   };
 
   const handleSave = () => {
@@ -161,19 +187,35 @@ const AdminDashboard = () => {
   };
 
   const handleAddStudent = () => {
+    // Combine the series and seat_number before saving
+    const seat_number = `${newSeries}${newSeatNumber}`;
+
     if (
       !newStudent.registration_number ||
       !newStudent.name ||
       !newStudent.department ||
       !newStudent.year ||
-      !newStudent.seat_number
+      !seat_number
     ) {
       setStatusMessage("All fields are required to add a new student!");
       return;
     }
 
+    // Check if the seat_number already exists
+    const isSeatNumberExists = seatingData.some((student) => student.seat_number === seat_number);
+
+    if (isSeatNumberExists) {
+      setStatusMessage("Seat number already exists!");
+      return;
+    }
+
+    const studentData = {
+      ...newStudent,
+      seat_number, // Assign the combined seat_number
+    };
+
     axios
-      .post(api_url, newStudent)
+      .post(api_url, studentData)
       .then((response) => {
         setSeatingData([...seatingData, response.data]);
         setNewStudent({
@@ -183,6 +225,8 @@ const AdminDashboard = () => {
           year: "",
           seat_number: "",
         });
+        setNewSeries(""); // Reset series field
+        setNewSeatNumber(""); // Reset seat number field
         setStatusMessage("New student added successfully.");
       })
       .catch((error) => {
@@ -192,7 +236,6 @@ const AdminDashboard = () => {
 
   return (
     <AdminDashboardContainer>
-      <Title>Admin Dashboard</Title>
       <Section>
         <Card bgcolor="#f0f8ff">
           <Heading>Add New Student</Heading>
@@ -213,37 +256,59 @@ const AdminDashboard = () => {
                 setNewStudent({ ...newStudent, name: e.target.value })
               }
             />
-            <Input
-              type="text"
-              placeholder="Department"
+            <Select
               value={newStudent.department}
               onChange={(e) =>
                 setNewStudent({ ...newStudent, department: e.target.value })
               }
-            />
-            <Input
-              type="number"
-              placeholder="Year"
+            >
+              <option value="Computer Science">Computer Science</option>
+              <option value="Mechanical">Mechanical</option>
+              <option value="Civil">Civil</option>
+              <option value="Electronics">Electronics</option>
+            </Select>
+            <Select
               value={newStudent.year}
               onChange={(e) =>
                 setNewStudent({ ...newStudent, year: e.target.value })
               }
-            />
+            >
+              <option value="2023">2023</option>
+              <option value="2024">2024</option>
+            </Select>
+
+            <Select
+              value={newSeries}
+              onChange={(e) => setNewSeries(e.target.value)}
+            >
+              <option value="A" disabled>A</option>
+              <option value="B" disabled>B</option>
+              <option value="C" disabled>C</option>
+              <option value="D" disabled>D</option>
+              <option value="E" disabled>E</option>
+              <option value="F" disabled>F</option>
+              <option value="G" disabled>G</option>
+              <option value="H" disabled>H</option>
+              <option value="I">I</option>
+              <option value="J">J</option>
+            </Select>
+
             <Input
               type="text"
               placeholder="Seat Number"
-              value={newStudent.seat_number}
-              onChange={(e) =>
-                setNewStudent({ ...newStudent, seat_number: e.target.value })
-              }
+              value={newSeatNumber}
+              onChange={(e) => setNewSeatNumber(e.target.value)}
             />
             <Button onClick={handleAddStudent} primary wide>
               Add Student
             </Button>
+            {/* Display status message after Add button */}
+            <StatusMessage>{statusMessage}</StatusMessage>
           </div>
         </Card>
       </Section>
 
+      {/* Rest of your existing sections */}
       <Section>
         <Card bgcolor="#eafaf1">
           <Heading>Manage Seats</Heading>
