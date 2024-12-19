@@ -1,13 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
+import { PiArmchairDuotone } from "react-icons/pi";
+import backgroundImage from '../assets/images/i1.jpg'; 
 
 const LandingPageWrapper = styled.div`
-    background-color: #75e6da;
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    height: 130vh;
-  }
+  background-color: #75e6da;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 160vh;
 `;
 
 const HeaderSection = styled.div`
@@ -25,8 +26,10 @@ const SubHeading = styled.p`
 `;
 
 const BgImage = styled.div`
-  background-image: url(../src/assets/images/2.jpg);
-  height: 60vh;
+  background-image: url(${backgroundImage});
+  height: 90vh;
+  border-radius: 5%;
+  width: 90%;
   background-size: cover;
   background-position: center;
   width: 100%;
@@ -41,7 +44,7 @@ const FeaturesSection = styled.div`
 `;
 
 const FeatureCard = styled.div`
-  background-color: #fff;
+  background: linear-gradient(120deg, #89f7fe, #66a6ff);
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 20px;
@@ -86,30 +89,32 @@ const LandingPage = () => {
       <BgImage></BgImage>
 
       <FeaturesSection>
-        <FeatureCard>
-          <Icon>
-            <i className="fas fa-chart-line"></i>
-          </Icon>
-          <CardTitle>Career Path</CardTitle>
-          <CardText>Chart Your Career Path with a Research-Driven Analytical Approach</CardText>
-        </FeatureCard>
+          <FeatureCard>
+            <Icon>
+              <i className="fas fa-chair"></i>
+            </Icon>
+            <CardTitle>Graduate Seating</CardTitle>
+            <CardText>Organized seating for graduates to ensure a smooth and memorable convocation experience.</CardText>
+          </FeatureCard>
 
-        <FeatureCard>
-          <Icon>
-            <i className="fas fa-briefcase"></i>
-          </Icon>
-          <CardTitle>Portfolio</CardTitle>
-          <CardText>Start Your Portfolio from Ground Zero with a Capstone Project</CardText>
-        </FeatureCard>
+          <FeatureCard>
+            <Icon>
+              <i className="fas fa-user-friends"></i>
+            </Icon>
+            <CardTitle>Guest Arrangement</CardTitle>
+            <CardText>Dedicated seating areas for family and friends to celebrate your special day with ease.</CardText>
+          </FeatureCard>
 
-        <FeatureCard>
-          <Icon>
-            <i className="fas fa-headset"></i>
-          </Icon>
-          <CardTitle>Guidance</CardTitle>
-          <CardText>Providing Guidance and Support to Propel You Toward Your Career Goals</CardText>
-        </FeatureCard>
-      </FeaturesSection>
+          <FeatureCard>
+            <Icon>
+              <PiArmchairDuotone id="chair" />
+            </Icon>
+            <CardTitle>Seat Layout</CardTitle>
+            <CardText><CardText>Detailed seat layouts designed for easy navigation, ensuring all attendees find their assigned spots quickly and comfortably.</CardText>
+            </CardText>
+          </FeatureCard>
+        </FeaturesSection>
+
     </LandingPageWrapper>
   );
 };
