@@ -23,7 +23,7 @@ const Row = styled.div`
   gap: 5px;
 
   & > button:nth-child(7n) {
-    margin-right: 70px; 
+    margin-right: 90px; 
   }
 `;
 
@@ -31,6 +31,7 @@ const Seat = styled.button`
   background-color: ${({ isRed }) => (isRed ? "blue" : "#f0f0f0")};
   border: 1px solid  #ccc;
   border-radius: 5px;
+  font-size:25px;
   padding: 10px;
   cursor: pointer;
   display: flex;
@@ -60,13 +61,12 @@ const ScreenImage = styled.img`
 const VisualMap1 = ({ highlightedSeat }) => {
   const rowLabels = "ABCDEFGHIJK";
 
-  // Generate seating layout
   const rows = Array.from({ length: 11 }, (_, rowIndex) => (
     <Row key={rowIndex}>
       {Array.from({ length: 20 }, (_, seatIndex) => {
         const seat_number = `${rowLabels[rowIndex]}${seatIndex + 1}`;
         const isHighlighted = seat_number === highlightedSeat;
-        const isRed = rowLabels[rowIndex] === "K"; // Mark row K as red
+        const isRed = rowLabels[rowIndex] === "K"; 
 
         return (
           <Seat key={seat_number} isHighlighted={isHighlighted} isRed={isRed}>

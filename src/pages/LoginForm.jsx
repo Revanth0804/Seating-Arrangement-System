@@ -3,16 +3,88 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
+
 const Title = styled.h1`
   text-align: center;
-  margin-top :10px;
+  margin-top: 10px;
   font-size: 40px;
   font-weight: bold;
   color: #333;
   margin-bottom: 10px;
 `;
 
+const FormContainer = styled.form`
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  border: 1px solid #507687;
+  border-radius: 8px;
+  background-color: #fcfaee;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  min-height: 69vh;
+`;
 
+const FormGroup = styled.div`
+  margin-top: 5%;
+  margin-bottom: 1rem;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #b8001f;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+
+  &:focus {
+    border-color: #507687;
+    outline: none;
+  }
+`;
+
+const Button = styled.button`
+  width: 100%;
+  padding: 0.5rem;
+  background-color: #b8001f;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #fcfaee;
+    color: #b8001f;
+  }
+`;
+
+const ErrorMessage = styled.p`
+  color: red;
+  font-weight: bold;
+  margin-bottom: 1rem;
+`;
+
+const SuccessMessage = styled.p`
+  color: green;
+  font-weight: bold;
+  margin-bottom: 1rem;
+`;
+
+const LinkText = styled.p`
+  text-align: center;
+  margin-top: 1rem;
+
+  a {
+    color: #507687;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+`;
 
 const LoginForm = ({ setLoggedInUser }) => {
   const [loginData, setLoginData] = useState({
@@ -40,11 +112,11 @@ const LoginForm = ({ setLoggedInUser }) => {
         setSuccessMessage("Login successful! Redirecting...");
         setErrorMessage("");
 
-        // Pass the logged-in user's email
+        
         setLoggedInUser(user.email);
 
         setTimeout(() => {
-          navigate("/loginhome"); // Redirect to the UserProfile page
+          navigate("/loginhome"); 
         }, 2000);
       } else {
         setErrorMessage("Invalid email or password.");
@@ -60,39 +132,36 @@ const LoginForm = ({ setLoggedInUser }) => {
   return (
     <>
       <Title>Student Login</Title>
-      <form className="login-form" onSubmit={handleLogin}>
-      <div className="form-group">
-        <input
-          type="email"
-          placeholder="Enter your Email"
-          value={loginData.email}
-          onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
-        />
-      </div>
-      <div className="form-group">
-        <input
-          type="password"
-          placeholder="Enter your Password"
-          value={loginData.password}
-          onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
-        />
-      </div>
+      <FormContainer onSubmit={handleLogin}>
+        <FormGroup>
+          <Input
+            type="email"
+            placeholder="Enter your Email"
+            value={loginData.email}
+            onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
+          />
+        </FormGroup>
+        <FormGroup>
+          <Input
+            type="password"
+            placeholder="Enter your Password"
+            value={loginData.password}
+            onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+          />
+        </FormGroup>
 
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
-      {successMessage && <p className="success-message">{successMessage}</p>}
+        {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+        {successMessage && <SuccessMessage>{successMessage}</SuccessMessage>}
 
-      <button type="submit" className="btn-login">
-        Login
-      </button>
-      <p>
-        Don't have an account?{" "}
-        <span style={{ cursor: "pointer" }}>
-          <Link to="/Signup">Signup</Link>
-        </span>
-      </p>
-    </form>
+        <Button type="submit">Login</Button>
+        <LinkText>
+          Don't have an account?{" "}
+          <span style={{ cursor: "pointer" }}>
+            <Link to="/Signup">Signup</Link>
+          </span>
+        </LinkText>
+      </FormContainer>
     </>
-    
   );
 };
 

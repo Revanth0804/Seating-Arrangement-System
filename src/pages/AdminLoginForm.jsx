@@ -12,6 +12,79 @@ const Title = styled.h1`
   margin-bottom: 10px;
 `;
 
+const FormContainer = styled.form`
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  border: 1px solid #507687;
+  border-radius: 8px;
+  background-color: #fcfaee;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  min-height: 69vh;
+`;
+
+const FormGroup = styled.div`
+  margin-top: 5%;
+  margin-bottom: 1rem;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #b8001f;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+
+  &:focus {
+    border-color: #507687;
+    outline: none;
+  }
+`;
+
+const Button = styled.button`
+  width: 100%;
+  padding: 0.5rem;
+  background-color: #b8001f;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #fcfaee;
+    color: #b8001f;
+  }
+`;
+
+const ErrorMessage = styled.p`
+  color: red;
+  font-weight: bold;
+  margin-bottom: 1rem;
+`;
+
+const SuccessMessage = styled.p`
+  color: green;
+  font-weight: bold;
+  margin-bottom: 1rem;
+`;
+
+const LinkText = styled.p`
+  text-align: center;
+  margin-top: 1rem;
+
+  a {
+    color: #507687;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+`;
+
 const AdminLoginForm = ({ setLoggedInAdmin }) => {
   const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [errorMessage, setErrorMessage] = useState("");
@@ -19,7 +92,6 @@ const AdminLoginForm = ({ setLoggedInAdmin }) => {
   const navigate = useNavigate();
 
   const API_URL = "https://server-u9ga.onrender.com/Admin";
-
 
   const clearMessages = () => {
     setErrorMessage("");
@@ -59,37 +131,35 @@ const AdminLoginForm = ({ setLoggedInAdmin }) => {
   return (
     <>
       <Title>Admin Login</Title>
-      <form className="login-form" onSubmit={handleLogin}>
-        <div className="form-group">
-          <input
+      <FormContainer onSubmit={handleLogin}>
+        <FormGroup>
+          <Input
             type="email"
             placeholder="Enter your Email"
             value={loginData.email}
             onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
           />
-        </div>
-        <div className="form-group">
-          <input
+        </FormGroup>
+        <FormGroup>
+          <Input
             type="password"
             placeholder="Enter your Password"
             value={loginData.password}
             onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
           />
-        </div>
+        </FormGroup>
 
-        {errorMessage && <p className="error-message">{errorMessage}</p>}
-        {successMessage && <p className="success-message">{successMessage}</p>}
+        {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+        {successMessage && <SuccessMessage>{successMessage}</SuccessMessage>}
 
-        <button type="submit" className="btn-login">
-          Login
-        </button>
-        <p>
+        <Button type="submit">Login</Button>
+        <LinkText>
           Not an admin?{" "}
-          <Link to="/login" className="link">
+          <Link to="/login">
             Go to Student Login
           </Link>
-        </p>
-      </form>
+        </LinkText>
+      </FormContainer>
     </>
   );
 };

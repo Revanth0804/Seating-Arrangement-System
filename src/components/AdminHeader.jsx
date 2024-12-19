@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-// Styled Components
-
 const HeaderContainer = styled.header`
   position: sticky;
   top: 0;
@@ -107,7 +105,7 @@ const LogoutButton = styled.button`
   cursor: pointer;
 `;
 
-// Component Definition
+
 const AdminHeader = ({ onLogout }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();

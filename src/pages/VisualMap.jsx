@@ -90,7 +90,7 @@ const VisualMap = ({ userEmail }) => {
 
       
         <h2>Seating Layout</h2>
-        {/* Pass highlightedSeat prop to VisualMap */}
+        
         <VisualMap1 highlightedSeat={studentView.seat} />
     
     </AppContainer>

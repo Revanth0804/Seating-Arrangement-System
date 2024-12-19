@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import styled from "styled-components";
 
-// Styled Components
+
 
 const HeaderContainer = styled.header`
   position: sticky;
@@ -60,7 +60,7 @@ const NavButton = styled.button`
   border-radius: 4px;
   font-size: 1rem;
   cursor: pointer;
-  margin: 10px;
+  margin-top:10%;
 
   &:hover {
     background-color: #ff6b6b;
@@ -95,11 +95,10 @@ const NavbarTogglerIcon = styled.span`
   margin: 5px auto;
 `;
 
-// Component
+
 function Header1() {
   const location = useLocation();
 
-  // Check the current path
   const isAdminLoginPage = location.pathname === "/adminlogin";
   const isStudentLoginPage = location.pathname === "/login";
   const isLandingPage = location.pathname === "/";

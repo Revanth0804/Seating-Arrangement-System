@@ -132,12 +132,12 @@ const Dashboard1 = ({ userEmail }) => {
 
         if (currentUser) {
           setStudentView({
-            id: currentUser.id, // Student ID for updating feedback
+            id: currentUser.id, 
             name: currentUser.name,
             seat: currentUser.seat_number || 'Seat not assigned',
             time: currentUser.time || 'Time not assigned',
             achievements: currentUser.achievements || [],
-            feedback: currentUser.feedback || '', // Existing feedback if any
+            feedback: currentUser.feedback || '', 
           });
         } else {
           setError('User data not found. Please check your login details.');
@@ -167,13 +167,12 @@ const Dashboard1 = ({ userEmail }) => {
     }
 
     try {
-      // Send PATCH request to update the student's feedback
       await axios.patch(`${API_URL}/${studentView.id}`, {
         feedback: feedback,
       });
 
       setSuccessMessage('Thank you for your feedback!');
-      setFeedback(''); // Reset the feedback input
+      setFeedback(''); 
     } catch (error) {
       console.error('Error submitting feedback:', error);
       setSuccessMessage('Failed to submit feedback. Please try again later.');

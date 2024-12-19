@@ -2,22 +2,80 @@ import React, { useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 
+
 const Title = styled.h1`
   text-align: center;
-  margin-top :10px;
+  margin-top: 10px;
   font-size: 40px;
   font-weight: bold;
   color: #333;
   margin-bottom: 10px;
 `;
 
+const FormContainer = styled.form`
+  max-width: 600px; /* Limit the width of the form */
+  margin: 2rem auto; /* Center the form horizontally with margin */
+  padding: 2rem; /* Add some padding inside the form */
+  border: 1px solid #507687; /* Light Blue border */
+  border-radius: 8px; /* Rounded corners */
+  background-color: #fcfaee; /* Light background color */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  min-height: 69vh;
+`;
+
+const FormGroup = styled.div`
+  margin-bottom: 1rem; /* Space between form fields */
+`;
+
+const Input = styled.input`
+  width: 100%; /* Full width inputs */
+  padding: 0.5rem; /* Padding for inputs */
+  border: 1px solid #b8001f; /* Red border for inputs */
+  border-radius: 4px; /* Slightly rounded corners for inputs */
+  font-size: 1rem; /* Increase font size */
+  transition: border-color 0.3s ease; /* Smooth transition for border color */
+
+  &:focus {
+    border-color: #507687; /* Light Blue border on focus */
+    outline: none; /* Remove default outline */
+  }
+`;
+
+const Button = styled.button`
+  width: 100%; /* Full width button */
+  padding: 0.5rem; /* Padding for button */
+  background-color: #b8001f; /* Red background for button */
+  color: white; /* White text */
+  border: none; /* No border */
+  border-radius: 4px; /* Rounded corners for button */
+  font-size: 1rem; /* Font size for button */
+  cursor: pointer; /* Change cursor on hover */
+  transition: background-color 0.3s ease; /* Smooth transition for background color */
+
+  &:hover {
+    background-color: #fcfaee; /* Light background on hover */
+    color: #b8001f; /* Change text color to Red on hover */
+  }
+`;
+
+const ErrorMessage = styled.p`
+  color: red;
+  font-weight: bold;
+  margin-bottom: 1rem;
+`;
+
+const SuccessMessage = styled.p`
+  color: green;
+  font-weight: bold;
+  margin-bottom: 1rem;
+`;
 
 const SignUpForm = ({ setIsLogin, users, setUsers }) => {
   const [newUser, setNewUser] = useState({
     name: "",
     email: "",
     password: "",
-    confirmPassword: "", // Added confirm password field
+    confirmPassword: "", 
   });
   const [validationErrors, setValidationErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
@@ -82,57 +140,53 @@ const SignUpForm = ({ setIsLogin, users, setUsers }) => {
   return (
     <>
       <Title>Student SignUp Form</Title>
-    <form className="signup-form" onSubmit={addUser}>
-      <div className="form-group">
-        <input
-          type="text"
-          placeholder="Name"
-          value={newUser.name}
-          onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
-        />
-        {validationErrors.name && <p className="error-message">{validationErrors.name}</p>}
-      </div>
+      <FormContainer onSubmit={addUser}>
+        <FormGroup>
+          <Input
+            type="text"
+            placeholder="Name"
+            value={newUser.name}
+            onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
+          />
+          {validationErrors.name && <ErrorMessage>{validationErrors.name}</ErrorMessage>}
+        </FormGroup>
 
-      <div className="form-group">
-        <input
-          type="email"
-          placeholder="Enter your Email"
-          value={newUser.email}
-          onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
-        />
-        {validationErrors.email && <p className="error-message">{validationErrors.email}</p>}
-      </div>
+        <FormGroup>
+          <Input
+            type="email"
+            placeholder="Enter your Email"
+            value={newUser.email}
+            onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+          />
+          {validationErrors.email && <ErrorMessage>{validationErrors.email}</ErrorMessage>}
+        </FormGroup>
 
-      <div className="form-group">
-        <input
-          type="password"
-          placeholder="Enter your Password"
-          value={newUser.password}
-          onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
-        />
-        {validationErrors.password && <p className="error-message">{validationErrors.password}</p>}
-      </div>
+        <FormGroup>
+          <Input
+            type="password"
+            placeholder="Enter your Password"
+            value={newUser.password}
+            onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
+          />
+          {validationErrors.password && <ErrorMessage>{validationErrors.password}</ErrorMessage>}
+        </FormGroup>
 
-      <div className="form-group">
-        <input
-          type="password"
-          placeholder="Confirm your Password"
-          value={newUser.confirmPassword}
-          onChange={(e) => setNewUser({ ...newUser, confirmPassword: e.target.value })}
-        />
-        {validationErrors.confirmPassword && <p className="error-message">{validationErrors.confirmPassword}</p>}
-      </div>
+        <FormGroup>
+          <Input
+            type="password"
+            placeholder="Confirm your Password"
+            value={newUser.confirmPassword}
+            onChange={(e) => setNewUser({ ...newUser, confirmPassword: e.target.value })}
+          />
+          {validationErrors.confirmPassword && <ErrorMessage>{validationErrors.confirmPassword}</ErrorMessage>}
+        </FormGroup>
 
-      {successMessage && <p className="success-message">{successMessage}</p>}
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
+        {successMessage && <SuccessMessage>{successMessage}</SuccessMessage>}
+        {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
 
-      <button type="submit" className="btn-login">
-        Sign Up
-      </button>
-    </form>
-    
+        <Button type="submit">Sign Up</Button>
+      </FormContainer>
     </>
-    
   );
 };
 

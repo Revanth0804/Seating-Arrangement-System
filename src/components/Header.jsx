@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-// Styled Components
 
 const HeaderContainer = styled.header`
   position: sticky;
@@ -110,7 +109,7 @@ const LogoutButton = styled.button`
   }
 `;
 
-// Header Component
+
 const Header = ({ onLogout }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
@@ -120,9 +119,9 @@ const Header = ({ onLogout }) => {
   };
 
   const handleLogout = () => {
-    onLogout(); // Call the logout function
-    toggleMenu(); // Close the menu
-    navigate("/"); // Redirect to LandingPage
+    onLogout(); 
+    toggleMenu();
+    navigate("/"); 
   };
 
   return (

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
 
-// Styled Components
 const AdminDashboardContainer = styled.main`
   line-height: 1.8;
   padding: 20px;
@@ -84,7 +83,7 @@ const StatusMessage = styled.p`
   color: #05445e;
 `;
 
-// AdminDashboard Component
+
 const AdminDashboard = () => {
   const [seatingData, setSeatingData] = useState([]);
   const [statusMessage, setStatusMessage] = useState("Waiting to add students...");

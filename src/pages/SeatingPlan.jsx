@@ -66,6 +66,6 @@
 //       </div>
 //     </div>
 //   );
-// }
+// };
 
 // export default SeatingPlan;
