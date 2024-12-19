@@ -109,7 +109,10 @@ const UserProfile = ({ userEmail }) => {
 
         if (currentUser) {
           setUser(currentUser);
-          setFormData(currentUser);
+          setFormData({
+            ...currentUser,
+            profilePicture: currentUser.profilePicture || "https://via.placeholder.com/100", // Default image if none exists
+          });
         } else {
           setError("User data not found. Please check your login details.");
         }
@@ -136,6 +139,28 @@ const UserProfile = ({ userEmail }) => {
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       setFormData({ ...formData, profilePicture: imageUrl });
+    }
+  };
+
+  const deleteProfilePic = async () => {
+    try {
+      setError(null);
+      setSuccessMessage(null);
+
+      // Update profile with default image or null
+      const updatedData = { ...formData, profilePicture: "https://via.placeholder.com/100" };
+      const response = await axios.put(`${API_URL}/${user.id}`, updatedData);
+
+      if (response.status === 200) {
+        setUser(updatedData);
+        setFormData(updatedData);
+        setSuccessMessage("Profile picture deleted successfully!");
+      } else {
+        setError("Failed to delete profile picture. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error deleting profile picture:", error);
+      setError("Failed to delete profile picture. Please try again later.");
     }
   };
 
@@ -220,6 +245,10 @@ const UserProfile = ({ userEmail }) => {
               <strong>Year:</strong> {user.year}
             </Paragraph>
             <Button onClick={() => setIsEditing(true)}>Edit</Button>
+            {/* Add the "Delete Profile Picture" button here */}
+            <Button cancel onClick={deleteProfilePic}>
+              Delete Profile Picture
+            </Button>
           </div>
         )}
       </Info>
