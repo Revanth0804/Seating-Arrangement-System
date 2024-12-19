@@ -3,7 +3,6 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-
 const Title = styled.h1`
   text-align: center;
   margin-top: 10px;
@@ -112,11 +111,13 @@ const LoginForm = ({ setLoggedInUser }) => {
         setSuccessMessage("Login successful! Redirecting...");
         setErrorMessage("");
 
-        
-        setLoggedInUser(user.email);
+        // Set email in localStorage
+        localStorage.setItem("userEmail", user.email);
+        setLoggedInUser(user.email);  // Update the parent component state
 
+        // Redirect to the home page after 2 seconds
         setTimeout(() => {
-          navigate("/loginhome"); 
+          navigate("/loginhome");
         }, 2000);
       } else {
         setErrorMessage("Invalid email or password.");

@@ -15,20 +15,20 @@ import AdminLoginForm from "../pages/AdminLoginForm";
 import AdminProtectedRoute from "../components/AdminProtectedRoute";
 
 function Routers() {
-  const [userEmail, setUserEmail] = useState(null);
-  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
+  const [userEmail, setUserEmail] = useState(() => localStorage.getItem("userEmail"));
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(() => localStorage.getItem("isAdminLoggedIn") === "true");
 
   useEffect(() => {
-    const storedUserEmail = localStorage.getItem("userEmail");
-    const storedAdminLogin = localStorage.getItem("isAdminLoggedIn") === "true";
-
-    if (storedUserEmail) {
-      setUserEmail(storedUserEmail);
+    // Sync userEmail with localStorage
+    if (userEmail) {
+      localStorage.setItem("userEmail", userEmail);
+    } else {
+      localStorage.removeItem("userEmail");
     }
-    setIsAdminLoggedIn(storedAdminLogin);
-  }, []);
+  }, [userEmail]);
 
   useEffect(() => {
+    // Sync isAdminLoggedIn with localStorage
     if (isAdminLoggedIn) {
       localStorage.setItem("isAdminLoggedIn", "true");
     } else {
@@ -38,7 +38,7 @@ function Routers() {
 
   const handleLogout = () => {
     setUserEmail(null);
-    setIsAdminLoggedIn(false); 
+    setIsAdminLoggedIn(false);
     localStorage.removeItem("userEmail");
     localStorage.removeItem("isAdminLoggedIn");
   };
@@ -52,45 +52,62 @@ function Routers() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/signup" element={<SignUpForm />} />
-          <Route path="/login" element={<LoginForm setLoggedInUser={(email) => setUserEmail(email)} />} />
+          <Route path="/login" element={<LoginForm setLoggedInUser={setUserEmail} />} />
           <Route path="/adminlogin" element={<AdminLoginForm setLoggedInAdmin={() => setIsAdminLoggedIn(true)} />} />
 
-          <Route path="/loginhome" element={
+          <Route
+            path="/loginhome"
+            element={
               <ProtectedRoute isLoggedIn={isUserLoggedIn}>
                 <Home />
               </ProtectedRoute>
-            } />
+            }
+          />
 
-          <Route path="/findseat" element={
+          <Route
+            path="/findseat"
+            element={
               <ProtectedRoute isLoggedIn={isUserLoggedIn}>
                 <FindSeat />
               </ProtectedRoute>
-            } />
+            }
+          />
 
-          <Route path="/visualmap" element={
+          <Route
+            path="/visualmap"
+            element={
               <ProtectedRoute isLoggedIn={isUserLoggedIn}>
                 <VisualMap userEmail={userEmail} />
               </ProtectedRoute>
-            } />
+            }
+          />
 
-          <Route path="/dashboard1" element={
+          <Route
+            path="/dashboard1"
+            element={
               <ProtectedRoute isLoggedIn={isUserLoggedIn}>
                 <Dashboard1 userEmail={userEmail} />
               </ProtectedRoute>
-            } />
+            }
+          />
 
-          <Route path="/profile" element={
+          <Route
+            path="/profile"
+            element={
               <ProtectedRoute isLoggedIn={isUserLoggedIn}>
                 <UserProfile userEmail={userEmail} />
               </ProtectedRoute>
-            } />
+            }
+          />
 
-          
-          <Route path="/admindashboard" element={
+          <Route
+            path="/admindashboard"
+            element={
               <AdminProtectedRoute isAdminLoggedIn={isAdminLoggedIn}>
                 <AdminDashboard />
               </AdminProtectedRoute>
-            } />
+            }
+          />
         </Routes>
       </MainLayout>
     </Router>
