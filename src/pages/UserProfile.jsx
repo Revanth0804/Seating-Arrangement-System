@@ -147,7 +147,6 @@ const UserProfile = ({ userEmail }) => {
       setError(null);
       setSuccessMessage(null);
 
-      // Update profile with default image or null
       const updatedData = { ...formData, profilePicture: "https://via.placeholder.com/100" };
       const response = await axios.put(`${API_URL}/${user.id}`, updatedData);
 
@@ -245,7 +244,6 @@ const UserProfile = ({ userEmail }) => {
               <strong>Year:</strong> {user.year}
             </Paragraph>
             <Button onClick={() => setIsEditing(true)}>Edit</Button>
-            {/* Add the "Delete Profile Picture" button here */}
             <Button cancel onClick={deleteProfilePic}>
               Delete Profile Picture
             </Button>

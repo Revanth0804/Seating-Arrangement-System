@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 
-
 const Title = styled.h1`
   text-align: center;
   margin-top: 10px;
@@ -13,50 +12,66 @@ const Title = styled.h1`
 `;
 
 const FormContainer = styled.form`
-  max-width: 600px; /* Limit the width of the form */
-  margin: 2rem auto; /* Center the form horizontally with margin */
-  padding: 2rem; /* Add some padding inside the form */
-  border: 1px solid #507687; /* Light Blue border */
-  border-radius: 8px; /* Rounded corners */
-  background-color: #fcfaee; /* Light background color */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  border: 1px solid #507687;
+  border-radius: 8px;
+  background-color: #fcfaee;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   min-height: 69vh;
+  transform: translateY(0);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  }
 `;
 
+
 const FormGroup = styled.div`
-  margin-bottom: 1rem; /* Space between form fields */
+  margin-bottom: 1rem;
 `;
 
 const Input = styled.input`
-  width: 100%; /* Full width inputs */
-  padding: 0.5rem; /* Padding for inputs */
-  border: 1px solid #b8001f; /* Red border for inputs */
-  border-radius: 4px; /* Slightly rounded corners for inputs */
-  font-size: 1rem; /* Increase font size */
-  transition: border-color 0.3s ease; /* Smooth transition for border color */
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #b8001f;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 
   &:focus {
-    border-color: #507687; /* Light Blue border on focus */
-    outline: none; /* Remove default outline */
+    border-color: #507687;
+    outline: none;
+    box-shadow: 0 0 8px rgba(80, 118, 135, 0.8);
   }
 `;
+
 
 const Button = styled.button`
-  width: 100%; /* Full width button */
-  padding: 0.5rem; /* Padding for button */
-  background-color: #b8001f; /* Red background for button */
-  color: white; /* White text */
-  border: none; /* No border */
-  border-radius: 4px; /* Rounded corners for button */
-  font-size: 1rem; /* Font size for button */
-  cursor: pointer; /* Change cursor on hover */
-  transition: background-color 0.3s ease; /* Smooth transition for background color */
+  width: 100%;
+  padding: 0.5rem;
+  background-color: #b8001f;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 
   &:hover {
-    background-color: #fcfaee; /* Light background on hover */
-    color: #b8001f; /* Change text color to Red on hover */
+    background-color: #fcfaee;
+    color: #b8001f;
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.95);
   }
 `;
+
 
 const ErrorMessage = styled.p`
   color: red;
@@ -70,18 +85,19 @@ const SuccessMessage = styled.p`
   margin-bottom: 1rem;
 `;
 
-const SignUpForm = ({ setIsLogin, users, setUsers }) => {
+const SignUpForm = ({ setIsLogin, users = [], setUsers }) => {
   const [newUser, setNewUser] = useState({
     name: "",
     email: "",
     password: "",
-    confirmPassword: "", 
+    confirmPassword: "",
   });
   const [validationErrors, setValidationErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const API_URL = "https://server-u9ga.onrender.com/Users";
+  const API_URL_USERS = "https://server-u9ga.onrender.com/Users";
+  const API_URL_STUDENTS = "https://server-u9ga.onrender.com/Student";
 
   const addUser = async (e) => {
     e.preventDefault();
@@ -99,8 +115,21 @@ const SignUpForm = ({ setIsLogin, users, setUsers }) => {
     if (Object.keys(errors).length > 0) return;
 
     try {
-      const response = await axios.get(API_URL);
-      const usersList = Array.isArray(response.data) ? response.data : [];
+      console.log("Users state before adding:", users);
+
+      const studentResponse = await axios.get(API_URL_STUDENTS);
+      const studentList = Array.isArray(studentResponse.data) ? studentResponse.data : [];
+      const matchingStudent = studentList.find((student) => student.email === newUser.email);
+
+      if (!matchingStudent) {
+        setErrorMessage("Student email ID does not match. Please use a registered student email.");
+        setSuccessMessage("");
+        return;
+      }
+
+
+      const userResponse = await axios.get(API_URL_USERS);
+      const usersList = Array.isArray(userResponse.data) ? userResponse.data : [];
       const existingUser = usersList.find((user) => user.email === newUser.email);
 
       if (existingUser) {
@@ -109,31 +138,30 @@ const SignUpForm = ({ setIsLogin, users, setUsers }) => {
         return;
       }
 
-      const newUserResponse = await axios.post(API_URL, {
+
+      const newUserResponse = await axios.post(API_URL_USERS, {
         name: newUser.name,
         email: newUser.email,
         password: newUser.password,
       });
 
       if (newUserResponse.status === 201) {
-        setUsers([...users, newUserResponse.data]);
+        setUsers([...(users || []), newUserResponse.data]);
         setNewUser({ name: "", email: "", password: "", confirmPassword: "" });
         setValidationErrors({});
-        setSuccessMessage("Signup successful, Please login");
-
+        setSuccessMessage("Signup successful. Please log in.");
         setTimeout(() => {
           setIsLogin(true);
         }, 2000);
-
         setErrorMessage("");
       } else {
-        setErrorMessage("");
-        setSuccessMessage("Signup successful but received an unexpected response.");
+        setSuccessMessage("Unexpected response received.");
+        // setSuccessMessage("");
       }
     } catch (error) {
-      console.error("Signup error:", error.message);
+      console.error("Signup error:", error);
+      setSuccessMessage("Signup successful. Please login as student");
       setErrorMessage("");
-      setSuccessMessage("Signup successful.");
     }
   };
 

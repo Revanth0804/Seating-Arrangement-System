@@ -8,7 +8,7 @@ const LandingPageWrapper = styled.div`
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  min-height: 160vh;
+  min-height: 180vh;
 `;
 
 const HeaderSection = styled.div`
@@ -16,9 +16,35 @@ const HeaderSection = styled.div`
 `;
 
 const Heading = styled.h2`
-  font-size: 2rem;
-  color: #333;
+  font-size: 2.5rem;
+  color: #000; 
+  font-weight: bold; 
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  font-family: 'Playfair Display', serif;
+  animation: fadeIn 2s ease-in-out, slideIn 1.5s ease-out;
+  display: inline-block;
+  position: relative;
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideIn {
+    0% {
+      transform: translateY(-20px);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
 `;
+
 
 const SubHeading = styled.p`
   font-size: 1rem;
@@ -50,14 +76,16 @@ const FeatureCard = styled.div`
   padding: 20px;
   max-width: 300px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
   text-align: center;
 
   &:hover {
     transform: translateY(-10px);
     box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(120deg, #66a6ff, #89f7fe); /* New hover gradient */
   }
 `;
+
 
 const Icon = styled.div`
   font-size: 2rem;

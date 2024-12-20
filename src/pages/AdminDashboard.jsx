@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
 
-// Styled Components
-// ... (your styled components remain unchanged)
+
 const AdminDashboardContainer = styled.main`
   line-height: 1.8;
   padding: 20px;`
@@ -109,7 +108,7 @@ const StatusMessage = styled.p`
   color: #05445e;`
 ;
 
-// AdminDashboard Component
+
 const AdminDashboard = () => {
   const [seatingData, setSeatingData] = useState([]);
   const [statusMessage, setStatusMessage] = useState("Waiting to add students...");
@@ -132,7 +131,7 @@ const AdminDashboard = () => {
 
   const api_url = "https://server-u9ga.onrender.com/Student";
 
-  // Fetch data on mount
+
   useEffect(() => {
     axios
       .get(api_url)
@@ -145,7 +144,7 @@ const AdminDashboard = () => {
       });
   }, []);
 
-  // Filter data based on search and department
+ 
   useEffect(() => {
     const filteredData = seatingData.filter((student) => {
       const matchesSearch =
@@ -315,6 +314,7 @@ const AdminDashboard = () => {
                 setNewStudent({ ...newStudent, department: e.target.value })
               }
             >
+              <option value="">Select Department</option>
               <option value="Computer Science">Computer Science</option>
               <option value="Mechanical">Mechanical</option>
               <option value="Civil">Civil</option>
@@ -326,6 +326,7 @@ const AdminDashboard = () => {
                 setNewStudent({ ...newStudent, year: e.target.value })
               }
             >
+              <option value="">Select Year</option>
               <option value="2023">2023</option>
               <option value="2024">2024</option>
             </Select>
@@ -334,6 +335,7 @@ const AdminDashboard = () => {
               value={newSeries}
               onChange={(e) => setNewSeries(e.target.value)}
             >
+              <option value="">Select Seat Series</option>
               <option value="A" disabled>A</option>
               <option value="B" disabled>B</option>
               <option value="C" disabled>C</option>

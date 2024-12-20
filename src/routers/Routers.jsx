@@ -28,7 +28,6 @@ function Routers() {
   }, [userEmail]);
 
   useEffect(() => {
-    // Sync isAdminLoggedIn with localStorage
     if (isAdminLoggedIn) {
       localStorage.setItem("isAdminLoggedIn", "true");
     } else {

@@ -19,9 +19,17 @@ const FormContainer = styled.form`
   border: 1px solid #507687;
   border-radius: 8px;
   background-color: #fcfaee;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   min-height: 69vh;
+  transform: translateY(0);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  }
 `;
+
 
 const FormGroup = styled.div`
   margin-top: 5%;
@@ -34,11 +42,12 @@ const Input = styled.input`
   border: 1px solid #b8001f;
   border-radius: 4px;
   font-size: 1rem;
-  transition: border-color 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 
   &:focus {
     border-color: #507687;
     outline: none;
+    box-shadow: 0 0 8px rgba(80, 118, 135, 0.8);
   }
 `;
 
@@ -51,13 +60,19 @@ const Button = styled.button`
   border-radius: 4px;
   font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 
   &:hover {
     background-color: #fcfaee;
     color: #b8001f;
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.95);
   }
 `;
+
 
 const ErrorMessage = styled.p`
   color: red;
@@ -111,11 +126,10 @@ const LoginForm = ({ setLoggedInUser }) => {
         setSuccessMessage("Login successful! Redirecting...");
         setErrorMessage("");
 
-        // Set email in localStorage
+        
         localStorage.setItem("userEmail", user.email);
-        setLoggedInUser(user.email);  // Update the parent component state
+        setLoggedInUser(user.email); 
 
-        // Redirect to the home page after 2 seconds
         setTimeout(() => {
           navigate("/loginhome");
         }, 2000);
